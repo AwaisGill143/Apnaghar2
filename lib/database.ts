@@ -4,16 +4,27 @@ import type { Property, User, Investment, ShariahBoardMember } from "./supabase"
 // Properties
 export async function getProperties(shariahOnly = false) {
   try {
-    let query = supabase.from("properties").select("*").order("created_at", { ascending: false })
+    // Test DB connection by fetching one row
+    const { data: testData, error: testError } = await supabase.from("properties").select("*").limit(1)
+    if (testError) {
+      console.error("DB connection error:", testError)
+    } else {
+      console.log("DB connection successful. Sample data:", testData)
+    }
 
+    // Fetch properties
+    let query = supabase.from("properties").select("*").order("created_at", { ascending: false })
     if (shariahOnly) {
       query = query.eq("shariah_compliant", true)
     }
-
     const { data, error } = await query
+
     if (error) {
       console.error("Error fetching properties:", error)
       throw error
+    }
+    if (!data) {
+      throw new Error("No properties returned from Supabase")
     }
     return data as Property[]
   } catch (error) {

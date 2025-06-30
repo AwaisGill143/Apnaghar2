@@ -66,7 +66,9 @@ export function PropertyCard({ property }: PropertyCardProps) {
           </div>
           <div className={isRTL ? "text-right" : ""}>
             <span className="text-gray-600">{t("minimum")}</span>
-            <p className="font-semibold ltr-content">PKR {property.minimumInvestment.toLocaleString()}</p>
+            <p className="font-semibold ltr-content">
+              PKR {(property.minimumInvestment ?? 0).toLocaleString()}
+            </p>
           </div>
           <div className={isRTL ? "text-right" : ""}>
             <span className="text-gray-600">{t("funded")}</span>
